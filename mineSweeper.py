@@ -1,4 +1,3 @@
-from re import A
 from tkinter import *
 import random
 
@@ -22,27 +21,37 @@ def left_click(event):
     except_num=event.widget.num
 
     if not bomb_list:
-        while len(bomb_list)!=20:
-            bomb_num=random.randint(0,width*height-1)
+        while len(bomb_list)!=square/8:
+            bomb_num=random.randint(0,square-1)
             if bomb_num!=except_num and (bomb_num in bomb_list)==False:
                 bomb_list.append(bomb_num)
-        for i in bomb_list:
-            frame_list[i].configure(bg="red")
     bomb_count=search_bomb(bomb_list,event.widget.num)
     if bomb_count==9:
         print("地雷を踏みました")
+        for i in bomb_list:
+            frame_list[i].configure(bg="red")
+        for i in frame_list:
+            i.bind("<Button-1>",stop)
     else:
         print(bomb_count)
+        bomb_count_label=Label(event.widget,text=bomb_count,bg="LightGray")
+        bomb_count_label.place(width=25,height=25)
+        event.widget.bind("<Button-1>",stop)
+
+
+def stop(event):
+    pass
 
 
 i=0
 frame_list=[]
 height=9
 width=16
+square=height*width #マスの総数
 for x in range(height):
     for y in range(width):
         frame=Frame(game_frame,width=30,height=30,bd="5",relief="raised",bg="LightGray")
-        frame.bind("<1>",left_click)
+        frame.bind("<Button-1>",left_click)
         frame.num=i
         frame_list.append(frame)
         frame.grid(row=x,column=y)
