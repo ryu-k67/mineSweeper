@@ -32,15 +32,39 @@ def left_click(event):
             frame_list[i].configure(bg="red")
         for i in frame_list:
             i.bind("<Button-1>",stop)
+        for i in frag_list:
+            i.place_forget()
     else:
         print(bomb_count)
         bomb_count_label=Label(event.widget,text=bomb_count,bg="LightGray")
-        bomb_count_label.place(width=25,height=25)
+        bomb_count_label.place(width=26,height=26)
         event.widget.bind("<Button-1>",stop)
 
 
 def stop(event):
     pass
+
+
+frag_list=[]
+def right_click(event):
+    if frag_list:
+        frag_num=frag_list[-1].num
+    else:
+        frag_num=0
+
+    frag_label=Label(event.widget,text="F",fg="red",bg="LightGray")
+    frag_label.place(width=20,height=20)
+    frag_label.num=frag_num
+    frag_label.bind("<Button-3>",delete_frag)
+    frag_list.append(frag_label)
+    # event.widget.bind("<Button-3>",stop)
+
+
+def delete_frag(event):
+    frag_list.remove(event.widget)
+    event.widget.place_forget()
+    # event.widget.bind("<Button-3>",right_click)
+
 
 
 i=0
@@ -52,6 +76,7 @@ for x in range(height):
     for y in range(width):
         frame=Frame(game_frame,width=30,height=30,bd="5",relief="raised",bg="LightGray")
         frame.bind("<Button-1>",left_click)
+        frame.bind("<Button-3>",right_click)
         frame.num=i
         frame_list.append(frame)
         frame.grid(row=x,column=y)
@@ -69,7 +94,7 @@ def search_bomb(list,num):
         around_list.append(num+1)
         around_list.append(num+width)
         around_list.append(num+width+1)
-    elif num % width==8: #右端
+    elif num % width==width-1: #右端
         around_list.append(num-width-1)
         around_list.append(num-width)
         around_list.append(num-1)
