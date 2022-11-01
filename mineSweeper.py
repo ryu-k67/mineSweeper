@@ -35,8 +35,14 @@ def left_click(event):
     else:
         print(bomb_count)
         bomb_count_label=Label(event.widget,text=bomb_count,bg="LightGray")
-        bomb_count_label.place(width=25,height=25)
+        bomb_count_label.place(width=26,height=26)
         event.widget.bind("<Button-1>",stop)
+
+
+def right_click(event):
+    frag_label=Label(event.widget,text="F",bg="LightGray")
+    frag_label.place(width=20,height=20)
+    
 
 
 def stop(event):
@@ -52,6 +58,7 @@ for x in range(height):
     for y in range(width):
         frame=Frame(game_frame,width=30,height=30,bd="5",relief="raised",bg="LightGray")
         frame.bind("<Button-1>",left_click)
+        frame.bind("<Button-3>",right_click)
         frame.num=i
         frame_list.append(frame)
         frame.grid(row=x,column=y)
