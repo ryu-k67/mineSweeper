@@ -1,5 +1,6 @@
+from re import A
 from tkinter import *
-from turtle import width
+import random
 
 #画面の生成
 root=Tk()
@@ -13,17 +14,33 @@ game_frame=Frame(root,width=300,height=300,relief="sunken",borderwidth=5,bg="Lig
 status_frame.pack(pady=5,padx=5)
 game_frame.pack(pady=5,padx=5)
 
+bomb_list=[]
 
 def left_click(event):
     event.widget.configure(relief="ridge",bd="2")
     print(event.widget.num)
+    except_num=event.widget.num
+
+    if not bomb_list:
+        while len(bomb_list)!=20:
+            bomb_num=random.randint(0,width*height-1)
+            if bomb_num!=except_num and (bomb_num in bomb_list)==False:
+                bomb_list.append(bomb_num)
+        for i in bomb_list:
+            frame_list[i].configure(bg="red")
+    bomb_count=search_bomb(bomb_list,event.widget.num)
+    if bomb_count==9:
+        print("地雷を踏みました")
+    else:
+        print(bomb_count)
+
 
 i=0
 frame_list=[]
-width=9
-height=16
-for x in range(width):
-    for y in range(height):
+height=9
+width=16
+for x in range(height):
+    for y in range(width):
         frame=Frame(game_frame,width=30,height=30,bd="5",relief="raised",bg="LightGray")
         frame.bind("<1>",left_click)
         frame.num=i
@@ -32,7 +49,50 @@ for x in range(width):
         i+=1
 
 
+def search_bomb(list,num):
+    around_list=[]
+    bomb_count=0
+    if num in list:
+        return 9
+    if num % width==0: #左端
+        around_list.append(num-width)
+        around_list.append(num-width+1)
+        around_list.append(num+1)
+        around_list.append(num+width)
+        around_list.append(num+width+1)
+    elif num % width==8: #右端
+        around_list.append(num-width-1)
+        around_list.append(num-width)
+        around_list.append(num-1)
+        around_list.append(num+width-1)
+        around_list.append(num+width)
+    elif num < width: #上端
+        around_list.append(num-1)
+        around_list.append(num+1)
+        around_list.append(num+width-1)
+        around_list.append(num+width)
+        around_list.append(num+width+1)
+    elif num > height*(width-1): #下端
+        around_list.append(num-width-1)
+        around_list.append(num-width)
+        around_list.append(num-width+1)
+        around_list.append(num-1)
+        around_list.append(num+1)
+    else: #周りに8マスある
+        around_list.append(num-width-1)
+        around_list.append(num-width)
+        around_list.append(num-width+1)
+        around_list.append(num-1)
+        around_list.append(num+1)
+        around_list.append(num+width-1)
+        around_list.append(num+width)
+        around_list.append(num+width+1)
 
+    for i in around_list:
+        if i in list:
+            bomb_count+=1
+
+    return bomb_count
 
 
 
