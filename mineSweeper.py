@@ -69,7 +69,7 @@ def search_bomb(list,num):
         around_list.append(num+1)
         around_list.append(num+width)
         around_list.append(num+width+1)
-    elif num % width==8: #右端
+    elif num % width==width-1: #右端
         around_list.append(num-width-1)
         around_list.append(num-width)
         around_list.append(num-1)
