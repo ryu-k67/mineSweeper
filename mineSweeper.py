@@ -79,17 +79,21 @@ def open_neighbor(num):
         if bomb_count_list[num]==0:
             print(num)
             if num % width==0: #左端
-                open_neighbor(num-width)
-                open_neighbor(num-width+1)
+                if not num<width: #左上角以外
+                    open_neighbor(num-width)
+                    open_neighbor(num-width+1)
                 open_neighbor(num+1)
-                open_neighbor(num+width)
-                open_neighbor(num+width+1)
+                if not num>(square-width): #左下角以外
+                    open_neighbor(num+width)
+                    open_neighbor(num+width+1)
             elif num % width==width-1: #右端
-                open_neighbor(num-width-1)
-                open_neighbor(num-width)
+                if not num<width: #右上角以外
+                    open_neighbor(num-width-1)
+                    open_neighbor(num-width)
                 open_neighbor(num-1)
-                open_neighbor(num+width-1)
-                open_neighbor(num+width)
+                if not num>(square-width): #右下角以外
+                    open_neighbor(num+width-1)
+                    open_neighbor(num+width)
             elif num < width: #上端
                 open_neighbor(num-1)
                 open_neighbor(num+1)
@@ -137,17 +141,21 @@ def search_bomb(list,num):
     if num in list:
         return 9
     if num % width==0: #左端
-        around_list.append(num-width)
-        around_list.append(num-width+1)
+        if not num<width: #左上角以外
+            around_list.append(num-width)
+            around_list.append(num-width+1)
         around_list.append(num+1)
-        around_list.append(num+width)
-        around_list.append(num+width+1)
+        if not num>(square-width): #左下角以外
+            around_list.append(num+width)
+            around_list.append(num+width+1)
     elif num % width==width-1: #右端
-        around_list.append(num-width-1)
-        around_list.append(num-width)
+        if not num<width: #右上角以外
+            around_list.append(num-width-1)
+            around_list.append(num-width)
         around_list.append(num-1)
-        around_list.append(num+width-1)
-        around_list.append(num+width)
+        if not num>(square-width): #右下角以外
+            around_list.append(num+width-1)
+            around_list.append(num+width)
     elif num < width: #上端
         around_list.append(num-1)
         around_list.append(num+1)
