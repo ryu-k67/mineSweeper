@@ -21,7 +21,7 @@ def left_click(event):
     except_num=event.widget.num
 
     if not bomb_list:
-        while len(bomb_list)!=square/8:
+        while len(bomb_list)<=square/5:
             bomb_num=random.randint(0,square-1)
             if bomb_num!=except_num and (bomb_num in bomb_list)==False:
                 bomb_list.append(bomb_num)
@@ -29,6 +29,7 @@ def left_click(event):
             bomb_count=search_bomb(bomb_list,i)
             bomb_count_list.append(bomb_count)
     ct=bomb_count_list[event.widget.num]
+    # print(ct)
     if ct==9:
         print("地雷を踏みました")
         for i in bomb_list:
@@ -38,8 +39,7 @@ def left_click(event):
         for i in frag_list:
             i.place_forget()
     else:
-        print(ct)
-        
+        # print(ct)
         open_neighbor(event.widget.num)
 
 
@@ -69,32 +69,38 @@ def delete_frag(event):
 
 
 def open_neighbor(num):
-    frame_list[num].configure(relief="ridge",bd="2")
-    bomb_count_label=Label(frame_list[num],text=bomb_count_list[num],bg="LightGray")
-    bomb_count_label.place(width=26,height=26)
-    frame_list[num].bind("<Button-1>",stop)
+    
     if frame_list_frag[num]!=1:
+        frame_list[num].configure(relief="ridge",bd="2")
+        bomb_count_label=Label(frame_list[num],text=bomb_count_list[num],bg="LightGray")
+        bomb_count_label.place(width=26,height=26)
+        frame_list[num].bind("<Button-1>",stop)
         frame_list_frag[num]=1
         if bomb_count_list[num]==0:
+            print(num)
             if num % width==0: #左端
-                open_neighbor(num-width)
-                open_neighbor(num-width+1)
+                if not num<width: #左上角以外
+                    open_neighbor(num-width)
+                    open_neighbor(num-width+1)
                 open_neighbor(num+1)
-                open_neighbor(num+width)
-                open_neighbor(num+width+1)
+                if not num>(square-width): #左下角以外
+                    open_neighbor(num+width)
+                    open_neighbor(num+width+1)
             elif num % width==width-1: #右端
-                open_neighbor(num-width-1)
-                open_neighbor(num-width)
+                if not num<width: #右上角以外
+                    open_neighbor(num-width-1)
+                    open_neighbor(num-width)
                 open_neighbor(num-1)
-                open_neighbor(num+width-1)
-                open_neighbor(num+width)
+                if not num>(square-width): #右下角以外
+                    open_neighbor(num+width-1)
+                    open_neighbor(num+width)
             elif num < width: #上端
                 open_neighbor(num-1)
                 open_neighbor(num+1)
                 open_neighbor(num+width-1)
                 open_neighbor(num+width)
                 open_neighbor(num+width+1)
-            elif num > height*(width-1): #下端
+            elif num > (square-width): #下端
                 open_neighbor(num-width-1)
                 open_neighbor(num-width)
                 open_neighbor(num-width+1)
@@ -114,8 +120,8 @@ def open_neighbor(num):
 i=0
 frame_list=[]
 frame_list_frag=[]
-height=9
-width=16
+height=10
+width=20
 square=height*width #マスの総数
 for x in range(height):
     for y in range(width):
@@ -135,24 +141,28 @@ def search_bomb(list,num):
     if num in list:
         return 9
     if num % width==0: #左端
-        around_list.append(num-width)
-        around_list.append(num-width+1)
+        if not num<width: #左上角以外
+            around_list.append(num-width)
+            around_list.append(num-width+1)
         around_list.append(num+1)
-        around_list.append(num+width)
-        around_list.append(num+width+1)
+        if not num>(square-width): #左下角以外
+            around_list.append(num+width)
+            around_list.append(num+width+1)
     elif num % width==width-1: #右端
-        around_list.append(num-width-1)
-        around_list.append(num-width)
+        if not num<width: #右上角以外
+            around_list.append(num-width-1)
+            around_list.append(num-width)
         around_list.append(num-1)
-        around_list.append(num+width-1)
-        around_list.append(num+width)
+        if not num>(square-width): #右下角以外
+            around_list.append(num+width-1)
+            around_list.append(num+width)
     elif num < width: #上端
         around_list.append(num-1)
         around_list.append(num+1)
         around_list.append(num+width-1)
         around_list.append(num+width)
         around_list.append(num+width+1)
-    elif num > height*(width-1): #下端
+    elif num > (square-width): #下端
         around_list.append(num-width-1)
         around_list.append(num-width)
         around_list.append(num-width+1)
