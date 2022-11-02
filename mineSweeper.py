@@ -14,7 +14,7 @@ status_frame.pack(pady=5,padx=5)
 game_frame.pack(pady=5,padx=5)
 
 bomb_list=[]
-
+bomb_count_list=[]
 def left_click(event):
     event.widget.configure(relief="ridge",bd="2")
     print(event.widget.num)
@@ -25,8 +25,11 @@ def left_click(event):
             bomb_num=random.randint(0,square-1)
             if bomb_num!=except_num and (bomb_num in bomb_list)==False:
                 bomb_list.append(bomb_num)
-    bomb_count=search_bomb(bomb_list,event.widget.num)
-    if bomb_count==9:
+        for i in range(square):
+            bomb_count=search_bomb(bomb_list,i)
+            bomb_count_list.append(bomb_count)
+    ct=bomb_count_list[event.widget.num]
+    if ct==9:
         print("地雷を踏みました")
         for i in bomb_list:
             frame_list[i].configure(bg="red")
@@ -35,8 +38,8 @@ def left_click(event):
         for i in frag_list:
             i.place_forget()
     else:
-        print(bomb_count)
-        bomb_count_label=Label(event.widget,text=bomb_count,bg="LightGray")
+        print(ct)
+        bomb_count_label=Label(event.widget,text=ct,bg="LightGray")
         bomb_count_label.place(width=26,height=26)
         event.widget.bind("<Button-1>",stop)
 
@@ -65,6 +68,9 @@ def delete_frag(event):
     event.widget.place_forget()
     # event.widget.bind("<Button-3>",right_click)
 
+
+# def open_neighbor(num,event):
+    
 
 
 i=0
