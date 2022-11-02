@@ -39,12 +39,11 @@ def left_click(event):
             i.place_forget()
     else:
         print(ct)
-        bomb_count_label=Label(event.widget,text=ct,bg="LightGray")
-        bomb_count_label.place(width=26,height=26)
-        event.widget.bind("<Button-1>",stop)
+        
+        open_neighbor(event.widget.num)
 
 
-def stop(event):
+def stop():
     pass
 
 
@@ -69,12 +68,52 @@ def delete_frag(event):
     # event.widget.bind("<Button-3>",right_click)
 
 
-# def open_neighbor(num,event):
-    
+def open_neighbor(num):
+    frame_list[num].configure(relief="ridge",bd="2")
+    bomb_count_label=Label(frame_list[num],text=bomb_count_list[num],bg="LightGray")
+    bomb_count_label.place(width=26,height=26)
+    frame_list[num].bind("<Button-1>",stop)
+    if frame_list_frag[num]!=1:
+        frame_list_frag[num]=1
+        if bomb_count_list[num]==0:
+            if num % width==0: #左端
+                open_neighbor(num-width)
+                open_neighbor(num-width+1)
+                open_neighbor(num+1)
+                open_neighbor(num+width)
+                open_neighbor(num+width+1)
+            elif num % width==width-1: #右端
+                open_neighbor(num-width-1)
+                open_neighbor(num-width)
+                open_neighbor(num-1)
+                open_neighbor(num+width-1)
+                open_neighbor(num+width)
+            elif num < width: #上端
+                open_neighbor(num-1)
+                open_neighbor(num+1)
+                open_neighbor(num+width-1)
+                open_neighbor(num+width)
+                open_neighbor(num+width+1)
+            elif num > height*(width-1): #下端
+                open_neighbor(num-width-1)
+                open_neighbor(num-width)
+                open_neighbor(num-width+1)
+                open_neighbor(num-1)
+                open_neighbor(num+1)
+            else: #周りに8マスある
+                open_neighbor(num-width-1)
+                open_neighbor(num-width)
+                open_neighbor(num-width+1)
+                open_neighbor(num-1)
+                open_neighbor(num+1)
+                open_neighbor(num+width-1)
+                open_neighbor(num+width)
+                open_neighbor(num+width+1)
 
 
 i=0
 frame_list=[]
+frame_list_frag=[]
 height=9
 width=16
 square=height*width #マスの総数
@@ -85,6 +124,7 @@ for x in range(height):
         frame.bind("<Button-3>",right_click)
         frame.num=i
         frame_list.append(frame)
+        frame_list_frag.append(0)
         frame.grid(row=x,column=y)
         i+=1
 
