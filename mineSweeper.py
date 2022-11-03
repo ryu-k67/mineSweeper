@@ -12,7 +12,7 @@ def left_click(event):
     except_num=event.widget.num
 
     if not bomb_list:
-        status_label.config(text="左クリックでマスを開く\n右クリックでフラグを立てる")
+        status_label.config(text="左クリックでマスを開く\n右クリックで旗を立てる")
         while len(bomb_list)<square/5:
             bomb_num=random.randint(0,square-1)
             if bomb_num!=except_num and (bomb_num in bomb_list)==False:
@@ -185,8 +185,8 @@ game_frame=tk.Frame(root,width=300,height=300,relief="sunken",borderwidth=5,bg="
 status_frame.pack(pady=5,padx=5)
 game_frame.pack(pady=5,padx=5)
 
-status_label=tk.Label(status_frame,text="どこかマスを左クリックしたらゲームスタート",bg="LightGray")
-status_label.pack()
+status_label=tk.Label(status_frame,text="どこかマスを左クリックしたらゲームスタート",font=("normal","10"),bg="LightGray")
+status_label.place(width=300,height=50)
 
 i=0
 frame_list=[]
