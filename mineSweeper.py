@@ -1,23 +1,26 @@
-from tkinter import *
+import tkinter as tk
 import random
+import time
 
 #画面の生成
-root=Tk()
+root=tk.Tk()
 root.title("mineSweeper")
 root.resizable(1,1) #画面サイズの変更　0:変更不可、1:変更可
 
 
-status_frame=Frame(root,width=300,height=50,relief="sunken",borderwidth=5,bg="LightGray") #reliefは「flat」「sunken」「groove」「ridge」「raised」が選択できる
-game_frame=Frame(root,width=300,height=300,relief="sunken",borderwidth=5,bg="LightGray")
+status_frame=tk.Frame(root,width=300,height=50,relief="sunken",borderwidth=5,bg="LightGray") #reliefは「flat」「sunken」「groove」「ridge」「raised」が選択できる
+game_frame=tk.Frame(root,width=300,height=300,relief="sunken",borderwidth=5,bg="LightGray")
 
 status_frame.pack(pady=5,padx=5)
 game_frame.pack(pady=5,padx=5)
+
+
 
 bomb_list=[]
 bomb_count_list=[]
 def left_click(event):
     event.widget.configure(relief="ridge",bd="2")
-    print(event.widget.num)
+    # print(event.widget.num)
     except_num=event.widget.num
 
     if not bomb_list:
@@ -54,7 +57,7 @@ def right_click(event):
     else:
         frag_num=0
 
-    frag_label=Label(event.widget,text="F",fg="red",bg="LightGray")
+    frag_label=tk.Label(event.widget,text="F",fg="red",bg="LightGray")
     frag_label.place(width=20,height=20)
     frag_label.num=frag_num
     frag_label.bind("<Button-3>",delete_frag)
@@ -72,7 +75,7 @@ def open_neighbor(num):
     
     if frame_list_frag[num]!=1:
         frame_list[num].configure(relief="ridge",bd="2")
-        bomb_count_label=Label(frame_list[num],text=bomb_count_list[num],bg="LightGray")
+        bomb_count_label=tk.Label(frame_list[num],text=bomb_count_list[num],bg="LightGray")
         bomb_count_label.place(width=26,height=26)
         frame_list[num].bind("<Button-1>",stop)
         frame_list_frag[num]=1
@@ -125,7 +128,7 @@ width=20
 square=height*width #マスの総数
 for x in range(height):
     for y in range(width):
-        frame=Frame(game_frame,width=30,height=30,bd="5",relief="raised",bg="LightGray")
+        frame=tk.Frame(game_frame,width=30,height=30,bd="5",relief="raised",bg="LightGray")
         frame.bind("<Button-1>",left_click)
         frame.bind("<Button-3>",right_click)
         frame.num=i
