@@ -8,7 +8,6 @@ bomb_list=[]
 bomb_count_list=[]
 def left_click(event):
     event.widget.configure()
-    # print(event.widget.num)
     except_num=event.widget.num
 
     if not bomb_list:
@@ -21,14 +20,11 @@ def left_click(event):
             bomb_count=search_bomb(bomb_list,i)
             bomb_count_list.append(bomb_count)
     ct=bomb_count_list[event.widget.num]
-    # print(ct)
     if ct==9:
-        print("地雷を踏みました")
         status_label.config(text="ゲームオーバー！")
         finish()
         
     else:
-        # print(ct)
         open_neighbor(event.widget.num)
 
 
@@ -69,7 +65,6 @@ def open_neighbor(num):
         frame_list_frag[num]=1
         if open_num<square-len(bomb_list):
             if bomb_count_list[num]==0:
-                print(num)
                 if num % width==0: #左端
                     if not num<width: #左上角以外
                         open_neighbor(num-width)
